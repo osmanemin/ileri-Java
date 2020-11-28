@@ -1,0 +1,583 @@
+package com.mantarTeknoloji.mutercim.Business.Translate.FromTr;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+import com.mantarTeknoloji.mutercim.DataAccess.IWordDal;
+import com.mantarTeknoloji.mutercim.Entities.Noun;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+@Service
+public class TranslateFromTr {
+    private String osm, tr, turkce_ekler, unlu, basarili;
+    private SuffixesTR kok = new SuffixesTR();
+    private List<String> osmList_Str = new ArrayList<>();
+    //private EliBelinde obje = new EliBelinde();
+    private List<Noun> osmList;
+    private boolean check = false;
+    private Noun word;
+    private boolean isBasarili = false;
+    private List<Noun> nouns, verbs = new ArrayList<>();
+    private IWordDal wordDal;
+    
+    @Autowired
+    public TranslateFromTr(IWordDal wordDal) {
+    	this.nouns = wordDal.getAllNouns();
+    	for (Verb v : wordDal.getAllVerbs())
+    		this.verbs.add(new Noun(v.getTr(),v.getOsm(),v.getProper_noun()));
+    }
+
+    public void parcala(String metin) {
+
+        // gelen metin parçalanarak kelimelere parçalanıp tek tek işlenmekte
+        String[] paragraf = metin.split("\n");
+        for (String s : paragraf) {
+            String[] liste = s.split(" ");
+            int i = 0;
+            while (i < liste.length) {
+                isBasarili = false;
+                String noktalamaIsareti = "";
+                String parantez = "";
+                String cevirilen = liste[i].toLowerCase();
+                if (cevirilen.isEmpty() || cevirilen.contains("x") || cevirilen.contains("w") || cevirilen.contains("q")) {
+                    osmList_Str.add(cevirilen);
+                    osmList_Str.add(" ");
+                    i += 1;
+                    continue;
+                }
+                if (cevirilen.equals("-") || cevirilen.equals(".") || cevirilen.equals(",") || cevirilen.equals("?") || cevirilen.equals("!") || cevirilen.equals(":") || cevirilen.equals(";") || cevirilen.equals(")") || cevirilen.equals("_")) {
+                    osmList_Str.add(cevirilen);
+                    osmList_Str.add(" ");
+                    i += 1;
+                    continue;
+                }
+                if (cevirilen.contains("-")) {
+                    if (cevirilen.startsWith("-")) {
+                        osmList_Str.add("-");
+                        cevirilen = cevirilen.substring(1);
+                    } else if (!cevirilen.endsWith("-")) {
+                        String[] dizi = cevirilen.split("-");
+                        for (int k = 0; k < dizi.length; k++) {
+                            System.out.println(dizi.length + "*************************************************************************************---------------------------------");
+                            parcala(dizi[k]);
+                            osmList_Str.add("-");
+                        }
+                        osmList_Str.remove(osmList_Str.size()-1);
+                        osmList_Str.add(" ");
+                        i += 1;
+                        continue;
+                    }
+
+                }
+                if (cevirilen.endsWith(".") || cevirilen.endsWith(",") || cevirilen.endsWith("?") || cevirilen.endsWith("!") || cevirilen.endsWith(":") || cevirilen.endsWith(";") || cevirilen.endsWith(")") || cevirilen.endsWith("-") || cevirilen.endsWith("_")) {
+                    char nokta = cevirilen.charAt(cevirilen.length() - 1);
+                    switch (nokta) {
+                        case '.':
+                            if (cevirilen.endsWith("...")) {
+                                noktalamaIsareti += "...";
+                                cevirilen = cevirilen.substring(0, cevirilen.length() - 3);
+                            } else if (cevirilen.endsWith("..")) {
+                                noktalamaIsareti += "..";
+                                cevirilen = cevirilen.substring(0, cevirilen.length() - 2);
+
+                            } else {
+                                noktalamaIsareti += nokta;
+                                cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            }
+                            break;
+                        case ',':
+                            noktalamaIsareti += "،";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case '-':
+                            noktalamaIsareti += "-";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case '_':
+                            noktalamaIsareti += "_";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case '?':
+                            noktalamaIsareti += "؟";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case '!':
+                            noktalamaIsareti += "!";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case ':':
+                            noktalamaIsareti += ":";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case ';':
+                            noktalamaIsareti += "؛";
+                            cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            break;
+                        case ')':
+                            if (cevirilen.endsWith(".)")) {
+                                noktalamaIsareti += ".)";
+                                cevirilen = cevirilen.substring(0, cevirilen.length() - 2);
+                            } else {
+                                noktalamaIsareti += ")";
+                                cevirilen = cevirilen.substring(0, cevirilen.length() - 1);
+                            }
+                            break;
+
+                    }
+
+                }
+
+                if (cevirilen.startsWith("(")) {
+                    parantez += "(";
+                    cevirilen = cevirilen.substring(1);
+                }
+
+                check = false;
+
+                // VT de "-" yok
+                //cevirilen = cevirilen.replace("-", "");
+
+                // sayı varsa sadece yer değişimi olur
+                if (cevirilen.contains("1") || cevirilen.contains("2") || cevirilen.contains("3") || cevirilen.contains("4") || cevirilen.contains("5") || cevirilen.contains("6") ||
+                        cevirilen.contains("7") || cevirilen.contains("8") || cevirilen.contains("9") || cevirilen.contains("0")) {
+
+                    cevirilen = cevirilen.replace("1", "۱");
+                    cevirilen = cevirilen.replace("2", "۲");
+                    cevirilen = cevirilen.replace("3", "٣");
+                    cevirilen = cevirilen.replace("4", "٤");
+                    cevirilen = cevirilen.replace("5", "٥");
+                    cevirilen = cevirilen.replace("6", "٦");
+                    cevirilen = cevirilen.replace("7", "٧");
+                    cevirilen = cevirilen.replace("8", "٨");
+                    cevirilen = cevirilen.replace("9", "٩");
+                    cevirilen = cevirilen.replace("0", "٠");
+
+                    osmList_Str.add(cevirilen);
+                    isBasarili = true;
+                    check = true;
+
+                }
+                // yoksa isimler listesinde var mı ?
+                
+                // fiiller listesinde var mı?
+                if (!check) {
+                    esitmi(cevirilen, verbs);
+                }
+
+                if (!check) {
+                    esitmi(cevirilen, nouns);
+                }
+
+                // sapkalıların yerinde olabilir öyle de bakılmalı. (Fiiller)
+                if (!check) {
+                    sapkali(cevirilen, verbs);
+                }
+
+                // sapkalıların yerinde olabilir öyle de bakılmalı. (isimler)
+                if (!check) {
+                    sapkali(cevirilen, nouns);
+                }
+
+                // içinde tırnak varsa
+                if (!check) {
+                    if (cevirilen.contains("'")) {
+                        if (cevirilen.charAt(cevirilen.length() - 1) == '\'') {
+                            cevirilen = cevirilen.replace("'", "");
+                            cevirilen += liste[i + 1];
+                            i = i + 1;
+                        } else {
+                            cevirilen = cevirilen.replace("'", "");
+                        }
+                    }
+                }
+
+                // karşılığı yoksa içlerinde armaya başlıyoruz (fiiller)
+                if (!check) {
+                    ekli(cevirilen, verbs, true, 0);
+                }
+
+                // karşılığı yoksa içlerinde armaya başlıyoruz (isimler)
+                if (!check) {
+                    ekli(cevirilen, nouns, false, 0);
+                }
+
+                // ünlü daralması fiil ( isimlerde olmaz )
+                if (!check) {
+                    unluDaralmasi(cevirilen, verbs, false, 0);
+                }
+
+                // Ünlü Düşmesi fiillerde ve isimlerde olabilir
+                if (!check) {
+                    unluDusmesi(cevirilen, nouns, false, 0);
+                }
+
+                // ünlü düşmesi fiil
+                if (!check) {
+                    unluDusmesi(cevirilen, verbs, false, 0);
+                }
+
+                // Ünsüz Yumuşaması fiillerde ve isimlerde olabilir
+                if (!check) {
+                    unsuzYumusamasi(cevirilen, nouns, false, 0);
+                }
+
+                // Ünsüz Yumuşaması fiil
+                if (!check) {
+                    unsuzYumusamasi(cevirilen, verbs, false, 0);
+                }
+
+
+                // eli belinde çalışmicak
+ /*               if (!check) {
+                    //bu kod en son baş vurulacak yer
+                    obje.setMetin(cevirilen);
+                    obje.setMetin3("");
+                    String sonuc = obje.function();
+                    osmList_Str.add(sonuc);
+                    isBasarili = true;
+                }
+*/
+                if (!isBasarili) {
+                    if (liste[i].charAt(liste[i].length() - 1) == '\'') {
+                        osmList_Str.add(liste[i + 1] + " " + liste[i]);
+                        i = i + 1;
+                    } else if (cevirilen.equals(liste[i].toLowerCase()))
+                        osmList_Str.add(liste[i]);
+                }
+
+                if (osmList_Str.size() > 0)
+                    osmList_Str.add(osmList_Str.size() - 1, parantez);
+                else
+                    osmList_Str.add(parantez);
+                osmList_Str.add(noktalamaIsareti);
+                osmList_Str.add(" ");
+                i = i + 1;
+
+            }
+            osmList_Str.remove(osmList_Str.size() - 1);
+            osmList_Str.add("\n");
+        }
+        osmList_Str.remove(osmList_Str.size() - 1);
+        birlestir();
+
+
+    }
+
+
+    private void esitmi(String cevirilen, List<Noun> osmList) {
+        for (Noun o : osmList) {
+            if (cevirilen.equals(o.getTr())) {
+                osmList_Str.add(o.getOsm());
+                isBasarili = true;
+                check = true;
+                break;
+            }
+        }
+    }
+
+
+    private void sapkali(String cevirilen, List<Noun> osmList) {
+        this.osmList = osmList;
+        for (Noun o : this.osmList) {
+            o.setTr(o.getTr().replace("â", "a"));
+            o.setTr(o.getTr().replace("î", "i"));
+            o.setTr(o.getTr().replace("û", "u"));
+            if (cevirilen.equals(o.getTr())) {
+                osmList_Str.add(o.getOsm());
+                isBasarili = true;
+                check = true;
+                break;
+            }
+        }
+    }
+
+
+    private void ekli(String cevirilen, List<Noun> osmList, boolean isVerb, int t) {
+        for (int k = t; k < osmList.size(); k++) {
+            word = osmList.get(k);
+            if (cevirilen.startsWith(word.getTr())) {
+                osm = word.getOsm();
+                tr = word.getTr();
+                turkce_ekler = "";
+                for (int j = tr.length(); j < cevirilen.length(); j++) {
+                    turkce_ekler += cevirilen.charAt(j);
+                }
+                boolean nharfi = false;
+                if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                    nharfi = true;
+                kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                basarili = kok.start();
+                if (basarili != "iptal") {
+                    osmList_Str.add(osm + basarili);
+                    isBasarili = true;
+                    check = true;
+                    break;
+                } else {
+                    if (k + 1 < osmList.size() - 1)
+                        ekli(cevirilen, osmList, isVerb, k + 1);
+                    break;
+                }
+            }
+        }
+    }
+
+
+    // Fiillerin -yor eki alması ile kelimenin sonundaki "a,e" harleri "ı,i,u,ü" den birine dönüşür
+    private void unluDaralmasi(String cevirilen, List<Noun> osmList, boolean isVerb, int t) {
+        for (int k = t; k < osmList.size(); k++) {
+            word = osmList.get(k);
+            osm = word.getOsm();
+            tr = word.getTr();
+            if ((tr.endsWith("a") || tr.endsWith("e")) && tr.length() > 3) {
+                tr = tr.substring(0, tr.length() - 1);
+                osm = osm.substring(0, osm.length() - 1);
+                if (cevirilen.equals(tr)) {
+                    osmList_Str.add(osm);
+                    check = true;
+                    isBasarili = true;
+                    break;
+                } else if (cevirilen.startsWith(tr)) {
+                    turkce_ekler = "";
+                    for (int j = tr.length(); j < cevirilen.length(); j++) {
+                        turkce_ekler += cevirilen.charAt(j);
+                    }
+                    if (turkce_ekler.startsWith("yor") || turkce_ekler.startsWith("ıyor") || turkce_ekler.startsWith("iyor")) {
+                        boolean nharfi = false;
+                        if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                            nharfi = true;
+                        kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                        basarili = kok.start();
+                        if (basarili != "iptal") {
+                            osmList_Str.add(osm + basarili);
+                            isBasarili = true;
+                            check = true;
+                            break;
+                        } else {
+                            if (k + 1 < osmList.size() - 1)
+                                unluDaralmasi(cevirilen, osmList, isVerb, k + 1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    // iki hecelilerde olur
+    // birinci hece "a,e,o,ö" ikinci hecede "ı,i,u,ü" lerden biri olmak zorunda
+    private void unluDusmesi(String cevirilen, List<Noun> osmList, boolean isVerb, int t) {
+        for (int k = t; k < osmList.size(); k++) {
+            word = osmList.get(k);
+            osm = word.getOsm();
+            tr = word.getTr();
+            if (tr.length() < 7 && tr.length() > 2) {
+                if (tr.charAt(tr.length() - 1) == 'ı' || tr.charAt(tr.length() - 1) == 'i' || tr.charAt(tr.length() - 1) == 'u' || tr.charAt(tr.length() - 1) == 'ü') {
+                    tr = tr.replace(tr.charAt(tr.length() - 1), ' ');
+                    tr = tr.substring(0, tr.length() - 1);
+                    if (cevirilen.equals(tr)) {
+                        osmList_Str.add(osm);
+                        check = true;
+                        isBasarili = true;
+                        break;
+                    } else if (cevirilen.startsWith(tr)) {
+                        turkce_ekler = "";
+                        for (int j = tr.length(); j < cevirilen.length(); j++) {
+                            turkce_ekler += cevirilen.charAt(j);
+                        }
+                        boolean nharfi = false;
+                        if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                            nharfi = true;
+                        kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                        basarili = kok.start();
+                        if (basarili != "iptal") {
+                            osmList_Str.add(osm + basarili);
+                            isBasarili = true;
+                            check = true;
+                            break;
+                        } else {
+                            if (k + 1 < osmList.size() - 1)
+                                unluDusmesi(cevirilen, osmList, isVerb, k + 1);
+                            break;
+                        }
+
+                    }
+                } else if (tr.charAt(tr.length() - 2) == 'ı' || tr.charAt(tr.length() - 2) == 'i' || tr.charAt(tr.length() - 2) == 'u' || tr.charAt(tr.length() - 2) == 'ü') {
+                    unlu = "";
+                    for (int n = 0; n < tr.length(); n++) {
+                        if (n != tr.length() - 2) {
+                            unlu += tr.charAt(n);
+                        }
+                    }
+                    /*if (osm.length() > 3 && (osm.charAt(osm.length() - 2) == 'ی' || tr.charAt(osm.length() - 2) == 'و')) {
+                        String u_osm = "";
+                        for (int n = 0; n < tr.length(); n++) {
+                            if (n != tr.length() - 2) {
+                                unlu += tr.charAt(n);
+                            }
+                        }
+                        osm = u_osm;
+                    }*/
+
+                    tr = unlu;
+                    if (cevirilen.equals(tr)) {
+                        osmList_Str.add(osm);
+                        check = true;
+                        isBasarili = true;
+                        break;
+                    } else if (cevirilen.startsWith(tr)) {
+                        turkce_ekler = "";
+                        for (int j = tr.length(); j < cevirilen.length(); j++) {
+                            turkce_ekler += cevirilen.charAt(j);
+                        }
+                        if (turkce_ekler.length() == 0)
+                            break;
+                        boolean nharfi = false;
+                        if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                            nharfi = true;
+                        kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                        basarili = kok.start();
+                        if (basarili != "iptal") {
+                            osmList_Str.add(osm + basarili);
+                            isBasarili = true;
+                            check = true;
+                            break;
+                        } else {
+                            if (k + 1 < osmList.size() - 1)
+                                unluDusmesi(cevirilen, osmList, isVerb, k + 1);
+                            break;
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    // kökün sonundaki "p,ç,t,k" hafleri köke sesli bir harf gelmesi sonucu oluşur "b,c,d,ğ" şekline dönüşür
+    private void unsuzYumusamasi(String cevirilen, List<Noun> osmList, boolean isVerb, int t) {
+        for (int k = t; k < osmList.size(); k++) {
+            word = osmList.get(k);
+            osm = word.getOsm();
+            tr = word.getTr();
+
+            //try{
+            if ((tr.endsWith("p") || tr.endsWith("ç") || tr.endsWith("t") || tr.endsWith("k")) && tr.length() > 1 && osm.length() > 1) {
+
+            }
+
+            String tr2 = " ";
+            String osm2 = " ";
+            switch (tr.charAt(tr.length() - 1)) {
+                case 'p':
+                    tr = tr.substring(0, tr.length() - 1);
+                    tr += "b";
+                    osm = osm.substring(0, osm.length() - 1);
+                    osm += "ب";
+                    break;
+                case 'ç':
+                    tr = tr.substring(0, tr.length() - 1);
+                    tr += "c";
+                    osm = osm.substring(0, osm.length() - 1);
+                    osm += "ج";
+                    break;
+                case 't':
+                    tr = tr.substring(0, tr.length() - 1);
+                    tr += "d";
+                    osm = osm.substring(0, osm.length() - 1);
+                    osm += "د";
+                    break;
+                case 'k':
+                    tr = tr.substring(0, tr.length() - 1);
+                    tr2 = tr + "g";
+                    tr += "ğ";
+                    osm = osm.substring(0, osm.length() - 1);
+                    osm2 = osm + "گ";
+                    if (cevirilen.length() > tr.length() + 1 && (cevirilen.charAt(tr.length()) == 'e' || cevirilen.charAt(tr.length()) == 'i' || cevirilen.charAt(tr.length()) == 'ü' || cevirilen.charAt(tr.length()) == 'ö'))
+                        osm += "گ";
+                    else
+                        osm += "غ";
+                    break;
+            }
+            if (cevirilen.equals(tr)) {
+                osmList_Str.add(osm);
+                check = true;
+                isBasarili = true;
+                break;
+            } else if (cevirilen.equals(tr2)) {
+                osmList_Str.add(osm2);
+                check = true;
+                isBasarili = true;
+                break;
+            } else if (cevirilen.startsWith(tr)) {
+                turkce_ekler = "";
+                for (int j = tr.length(); j < cevirilen.length(); j++) {
+                    turkce_ekler += cevirilen.charAt(j);
+                }
+                boolean nharfi = false;
+                if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                    nharfi = true;
+                kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                basarili = kok.start();
+                if (basarili != "iptal") {
+                    osmList_Str.add(osm + basarili);
+                    isBasarili = true;
+                    check = true;
+                    break;
+                } else {
+                    if (k + 1 < osmList.size() - 1)
+                        unsuzYumusamasi(cevirilen, osmList, isVerb, k + 1);
+                    break;
+                }
+            } else if (cevirilen.startsWith(tr2)) {
+                turkce_ekler = "";
+                for (int j = tr2.length(); j < cevirilen.length(); j++) {
+                    turkce_ekler += cevirilen.charAt(j);
+                }
+                boolean nharfi = false;
+                if (tr.endsWith("ıl") || tr.endsWith("il") || tr.endsWith("ul") || tr.endsWith("ül"))
+                    nharfi = true;
+                kok.set(turkce_ekler, turkce_ekler.charAt(turkce_ekler.length() - 1), isVerb, nharfi);
+                String basarili = kok.start();
+                if (basarili != "iptal") {
+                    osmList_Str.add(osm2 + basarili);
+                    isBasarili = true;
+                    check = true;
+                    break;
+                } else {
+                    if (k + 1 < osmList.size() - 1)
+                        unsuzYumusamasi(cevirilen, osmList, isVerb, k + 1);
+                    break;
+                }
+            }
+            /*}
+            catch(Exception e){
+                System.out.println(o.getTurkce() + "**********************************************************************");
+                System.out.println(o.getOsmanlica() + "**********************************************************************");
+            }*/
+
+        }
+    }
+
+
+    private String birlestir() {
+        String result = "";
+        for (String s : osmList_Str) {
+            result += s;
+        }
+        return result;
+    }
+
+    public String translate(String text) {
+        osmList_Str = new ArrayList<>();
+        String metin = text;
+        parcala(metin);
+        return birlestir();
+    }
+}

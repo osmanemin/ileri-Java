@@ -1,0 +1,57 @@
+package com.mantarTeknoloji.mutercim.Entities;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Verb")
+public class WordVerb implements IWordModel{
+	@Column(name="tr")
+	private String tr;
+	
+	@Column(name="osm")
+	private String osm;
+	
+	@Column(name="proper_noun")
+	private String proper_noun;
+
+	public WordVerb() {}
+	
+	public WordVerb(String tr, String osm, String proper_noun) {
+		this.tr = tr;
+		this.osm = osm;
+		this.proper_noun = proper_noun;
+	}
+
+	@Override
+	public String getTr() {
+		return tr;
+	}
+
+	@Override
+	public void setTr(String tr) {
+		this.tr = tr;
+	}
+
+	@Override
+	public String getOsm() {
+		return osm;
+	}
+
+	@Override
+	public void setOsm(String osm) {
+		this.osm = osm;
+	}
+
+	@Override
+	public String getProper_noun() {
+		return proper_noun;
+	}
+	
+	@Override
+	public void setProper_noun(String proper_noun) {
+		this.proper_noun = proper_noun;
+	}	
+
+}

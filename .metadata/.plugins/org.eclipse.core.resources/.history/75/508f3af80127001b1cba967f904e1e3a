@@ -1,0 +1,11 @@
+package com.mantarTeknoloji.mutercim.DataAccess;
+
+import java.util.List;
+
+import com.mantarTeknoloji.mutercim.Entities.Noun;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+public interface IWordDal {
+	List<Verb> getAllVerb();
+	List<Noun> getAllNoun();
+}

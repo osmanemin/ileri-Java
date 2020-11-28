@@ -1,0 +1,10 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+import java.util.List;
+
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+public interface IWordService {
+	List<Verb> translateFromTr(String text);
+	//String tarnslateFromOs(String text);
+}

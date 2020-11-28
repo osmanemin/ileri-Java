@@ -1,0 +1,55 @@
+package com.mantarTeknoloji.mutercim.Entities;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity(name = "noun")
+@Table(name="noun")
+public class Noun implements IWordModel{
+	
+	@Id
+	@Column(name = "tr")
+	private String tr;
+	
+	@Column(name="osm")
+	private String osm;
+	
+	@Column(name="proper_noun")
+	private String proper_noun;
+	
+	public Noun() {}
+
+	public Noun(String tr, String osm, String proper_noun) {
+		super();
+		this.tr = tr;
+		this.osm = osm;
+		this.proper_noun = proper_noun;
+	}
+
+	public String getTr() {
+		return tr;
+	}
+
+	public void setTr(String tr) {
+		this.tr = tr;
+	}
+
+	public String getOsm() {
+		return osm;
+	}
+
+	public void setOsm(String osm) {
+		this.osm = osm;
+	}
+
+	public String getProper_noun() {
+		return proper_noun;
+	}
+
+	public void setProper_noun(String proper_noun) {
+		this.proper_noun = proper_noun;
+	}
+	
+}

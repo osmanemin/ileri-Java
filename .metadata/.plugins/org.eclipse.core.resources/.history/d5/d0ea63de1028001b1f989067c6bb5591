@@ -1,0 +1,29 @@
+package com.mantarTeknoloji.mutercim.RestApi;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mantarTeknoloji.mutercim.Business.IWordService;
+
+
+@RestController
+@RequestMapping("/api")
+public class WordController {
+	
+	private IWordService wordManager;
+	
+	@Autowired
+	public WordController(IWordService wordManager) {
+		super();
+		this.wordManager = wordManager;
+	}
+	
+	@GetMapping("/tr/{text}")
+	public String get2(@PathVariable String text) {
+		return wordManager.translateFromTr(text);
+	}
+	
+}

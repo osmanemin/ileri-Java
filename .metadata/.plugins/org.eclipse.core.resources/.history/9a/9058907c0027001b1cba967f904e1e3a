@@ -1,0 +1,24 @@
+package com.mantarTeknoloji.mutercim.DataAccess;
+
+import java.util.List;
+
+import com.mantarTeknoloji.mutercim.entities.Noun;
+import com.mantarTeknoloji.mutercim.entities.Verb;
+
+public class HibernateWordDal implements IWordDal{
+
+	
+	
+	@Override
+	public List<Verb> getAllVerb() {
+		
+		return null;
+	}
+
+	@Override
+	public List<Noun> getAllNoun() {
+		
+		return null;
+	}
+
+}

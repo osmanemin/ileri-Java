@@ -1,0 +1,5 @@
+package com.mantarteknoloji.hibernateAndJpa.restApi;
+
+public class ProductController {
+
+}

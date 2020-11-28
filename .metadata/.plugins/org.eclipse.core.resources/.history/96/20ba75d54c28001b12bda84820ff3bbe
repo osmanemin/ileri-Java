@@ -1,0 +1,62 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mantarTeknoloji.mutercim.Business.Translate.FromOs.TranslateFromOs;
+import com.mantarTeknoloji.mutercim.Business.Translate.FromTr.TranslateFromTr;
+import com.mantarTeknoloji.mutercim.DataAccess.IWordDal;
+import com.mantarTeknoloji.mutercim.Entities.Noun;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+@Service
+public class WordManager implements IWordService {
+
+	private IWordDal wordDal;
+	
+	
+	@Autowired
+	public WordManager(IWordDal wordDal) {
+		this.wordDal = wordDal;
+	}
+
+	@Override
+	@Transactional
+	public String translateFromTr(String text) {
+		List<Noun> nouns = wordDal.getAllNouns();
+		List<Verb> verbs = wordDal.getAllVerbs();
+		TranslateFromTr translateTr = new TranslateFromTr(nouns,verbs);
+		String result = translateTr.translate(text);
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public String translateFromOs(String text) {
+		List<Noun> nouns = wordDal.getAllNouns();
+		List<Verb> verbs = wordDal.getAllVerbs();
+		TranslateFromOs translateOs = new TranslateFromOs(nouns, verbs);
+		String result = translateOs.translate(text);
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public List<Noun> getByRandom() {
+		List<Noun> nouns = wordDal.getAllNouns();
+		Random random = new Random();
+		List<Noun> results = new ArrayList<Noun>();
+		int index;
+		for(int i = 0; i < 10; i++) {
+			index = random.nextInt(nouns.size());
+			results.add(nouns.get(index));
+		}
+		return results;
+	}
+
+}

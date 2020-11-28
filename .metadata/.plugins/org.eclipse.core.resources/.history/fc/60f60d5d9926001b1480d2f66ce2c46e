@@ -1,0 +1,5 @@
+package com.mantarTeknoloji.mutercim.DataAcccess;
+
+public interface IWordDal {
+
+}

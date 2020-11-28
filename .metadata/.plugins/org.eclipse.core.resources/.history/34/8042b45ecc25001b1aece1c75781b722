@@ -1,0 +1,5 @@
+package com.mantarteknoloji.hibernateAndJpa.DataAccess;
+
+public class HibernateProductDal {
+
+}

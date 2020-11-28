@@ -1,0 +1,28 @@
+package com.mantarTeknoloji.mutercim.RestApi;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mantarTeknoloji.mutercim.Business.IWordService;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+@RestController
+@RequestMapping("/api")
+public class WordController {
+	private IWordService wordService;
+
+	@Autowired
+	public WordController(IWordService wordService) {
+		this.wordService = wordService;
+	}
+	
+	@GetMapping("/deneme/{text}")
+	public List<Verb> tarnslate(@PathVariable String text) {
+		return wordService.translateFromTr(text);
+	}
+}

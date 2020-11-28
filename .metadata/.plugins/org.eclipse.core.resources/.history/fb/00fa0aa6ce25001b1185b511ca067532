@@ -1,0 +1,26 @@
+package com.mantarteknoloji.hibernateAndJpa.restApi;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mantarteknoloji.hibernateAndJpa.Business.IProductService;
+import com.mantarteknoloji.hibernateAndJpa.Entities.Product;
+
+@RestController
+@RequestMapping("/api")
+public class ProductController {
+	private IProductService productService;
+
+	@Autowired
+	public ProductController(IProductService productService) {
+		this.productService = productService;
+	}
+	
+	public List<Product> get(){
+		return productService.getAll();
+	}
+	
+}

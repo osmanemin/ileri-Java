@@ -1,0 +1,657 @@
+package com.mantarTeknoloji.mutercim.Business.TranslateFromTr;
+
+public class EliBelinde {
+
+    private String metin;
+    private String metin2;
+    private String liste[];
+    private String metin3;
+    private int i;
+
+    public void setMetin3(String metin3) {
+        this.metin3 = metin3;
+    }
+
+    public String function() {
+        metin = metin.toLowerCase();
+        metin = metin.replaceAll("â","a");
+        metin = metin.replaceAll("û","u");
+        metin = metin.replaceAll("î","i");
+        liste = metin.split(" ");
+
+
+        for (int j = 0; j < liste.length; j++) {
+            metin = liste[j];
+            int size = metin.length();
+            metin2 = "";
+            for (i = 0; i < size; i++) {
+                char anahtar = metin.charAt(i);
+                switch (anahtar) {
+                    //      gelen kelimenin karakterine caselerde işlemler yapılarak kelimenin bir sonraki harfe bağlanmaması, birden fazla şekilde yazılmalarına göre fonksiyonlara ayrıldı
+                    //      iki adet tekli fonksiyonu var bunlardan ilki bir sonraki harfe bitişik yazılmayanlar
+                    //      ikinci fonksiyon ise latin alfabesindeki karakteri temsil eden arap alfabesinde tek bir harf tarafından temsil edilmesi
+                    //      diğer fonksiyon çiftli fonksiyonudur.
+                    //      çiftli fonksiyonu latin alfabesindeki karakterlleri temsil eden arap alfabseinde iki adet harf bulunanlar tarafından kullanılır
+                    //      çiftli fonksiyonu tarafından kullanılan bir de yazi adında fonksiyon bulunmaktadır bu fonksiyon latin alfabesindeki temsil etmeye hangi herfin karşılık geleceğini bulur
+                    case 'a':
+                        if (i == 0 || metin.charAt(i - 1) == ' ') {
+                            metin2 += "آ";
+                        }
+                                /*metin2 += "ﺍ";
+                            metin2 += "ﻉ";
+                            metin2 += "ﻩ";
+                            metin2 += "أ";*/
+                        break;
+                    case 'b':
+                        metin2 = tekli("ب", "ب", "ب", "ب", metin2, metin, size);
+                        break;
+                    case 'c':
+                        metin2 = tekli("ج", "ج", "ج", "ج", metin2, metin, size);
+                        break;
+                    case 'ç':
+                        metin2 = tekli("چ", "چ", "چ", "چ", metin2, metin, size);
+                        break;
+                    case 'd':
+                        metin2 = tekli("د", "د", metin2, metin, size);
+                        break;
+                    case 'e':
+                        if (i == 0 || metin.charAt(i - 1) == ' ') {
+                            metin2 += "ا";
+                        }
+                        break;
+                    case 'f':
+                        metin2 = tekli("ف", "ف", "ف", "ف", metin2, metin, size);
+                        break;
+                    case 'g':       // aynı kod oldukları için tek bir yerde yazılması kararına varıldı
+                    case 'ğ':
+                        metin2 = ciftli("گ", "گ", "گ", "گ", "غ", "غ", "غ", "غ", metin2, metin, size);
+                        break;
+                    case 'h':
+                        metin2 = ciftli("ه", "ه", "ه", "ه", "خ", "خ", "خ", "خ", metin2, metin, size);
+                        break;
+                    case 'ı':
+                    case 'i':
+                        if (i == 0 || metin.charAt(i - 1) == ' ') {
+                            metin2 += "ای";
+                        }
+                        break;
+                    case 'j':
+                        metin2 = tekli("ژ", "ژ", metin2, metin, size);
+                        break;
+                    case 'k':
+                        metin2 = ciftli("ك", "ك", "ك", "ك", "ق", "ق", "ق", "ق", metin2, metin, size);
+                        break;
+                    case 'l':
+                        metin2 = tekli("ل", "ل", "ل", "ل", metin2, metin, size);
+                        break;
+                    case 'm':
+                        metin2 = tekli("م", "م", "م", "م", metin2, metin, size);
+                        break;
+                    case 'n':
+                        metin2 = tekli("ن", "ن", "ن", "ن", metin2, metin, size);
+                        //                      bu n harfi genellikle eklerde kullanılırmış            metin2 += "ﯓ";
+                        break;
+
+                    case 'u':           // aynı kod oldukları için beraberce yazılmaları kararına varıldı
+                    case 'ü':
+                    case 'o':
+                    case 'ö':
+                        if (i == 0 || metin.charAt(i - 1) == ' ') {
+                            metin2 += "او";
+                        }
+                        break;
+                    case 'p':
+                        metin2 = tekli("پ", "پ", "پ", "پ", metin2, metin, size);
+                        break;
+                    case 'r':
+                        metin2 = tekli("ر", "ر", metin2, metin, size);
+                        break;
+                    case 's':
+                        metin2 = ciftli("س", "س", "س", "س", "ص", "ص", "ص", "ص", metin2, metin, size);
+                        break;
+                    case 'ş':
+                        metin2 = tekli("ش", "ش", "ش", "ش", metin2, metin, size);
+                        break;
+                    case 't':
+                        if (i == 0) {
+                            metin2 = ciftli("ت", "ت", "ت", "ت", "ط", "ط", "ط", "ط", metin2, metin, size);
+                        } else
+                            metin2 = tekli("ت", "ت", "ت", "ت", metin2, metin, size);
+                        break;
+                    case 'v':
+                        metin2 = tekli("و", "و", metin2, metin, size);
+                        break;
+                    case 'y':
+                        metin2 = tekli("ی", "ی", "ی", "ی", metin2, metin, size);
+                        break;
+                    case 'z':
+                        metin2 = tekli("ز", "ز", metin2, metin, size);
+                        break;
+                    case ' ':
+                        metin2 += " ";
+                        break;
+                    case ',':
+                        metin2 += "،";
+                        break;
+                    case '?':
+                        metin2 += "؟";
+                        break;
+                    case '1':
+                        metin2 += "۱";
+                        break;
+                    case '2':
+                        metin2 += "۲";
+                        break;
+                    case '3':
+                        metin2 += "٣";
+                        break;
+                    case '4':
+                        metin2 += "٤";
+                        break;
+                    case '5':
+                        metin2 += "٥";
+                        break;
+                    case '6':
+                        metin2 += "٦";
+                        break;
+                    case '7':
+                        metin2 += "٧";
+                        break;
+                    case '8':
+                        metin2 += "٨";
+                        break;
+                    case '9':
+                        metin2 += "٩";
+                        break;
+                    case '0':
+                        metin2 += "٠";
+                        break;
+                    case '\'':
+                        break;
+                    default:
+                        metin2 += anahtar;
+                }
+            }
+            metin3 += metin2 + " ";
+        }
+        metin3 = metin3.substring(0, metin3.length() - 1);
+        return metin3;
+    }
+
+    //  tekli fonksiyonu overloading edilmiştir.
+
+    private String tekli(String bas, String son, String metin2, String metin, int size) {
+
+        //      "private String tekli(String bas, String son, String metin2, String metin, int size) "  fonksiyonu
+        //      "d,z,j,v,r,a,o,ü,ö,u" harfleri ve "e" ise sadece ilk harf olduğu zamaki durumlarda bir sonraki harfe bitişik yazılmayan arap alfabesi
+        //      karakteri ile gösterilir
+        //      Bu harfler tek başlarına ve sonda olamalrı halinde iki yazıma sahiptirler
+        //      Fonksiyonda yapılan işlemler harfin öncesine sonrasına bakılarak yapılır ve kendinden sonra gelen senli harfde bu fonksiyonda yazdırılır
+
+
+        //      kelimenin tek karakterden oluşması durumudur
+
+        if (size == 1) {
+            metin2 = bas;
+            return metin2;
+        }
+
+
+        //      harfin kelimenin yada cümlenin en sonunda olma durumunda çalışır
+
+        if (i + 1 == size || metin.charAt(i + 1) == ' ') {
+
+
+            if ((i == 1 && metin.charAt(0) == 'e') || (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ')) {
+                metin2 += bas;
+            } else if ((i - 2 >= 0) && (metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                    || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r') && (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ' || metin.charAt(i - 1) == 'e')) {
+                metin2 += bas;
+            } else
+                metin2 += son;
+            return metin2;
+        }
+
+
+        // harfin en başta olma durumunda işlem yapar
+
+        else if (i == 0) {
+            metin2 += bas;
+        }
+
+
+        //      bir önceki kelime bitişik yazılmayacak bir kelime ise uygulanacak işlem
+
+        else if (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == ' '
+                || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'o' || (i == 1 && metin.charAt(i - 1) == 'e')) {
+            metin2 += bas;
+        }
+
+
+        //      bir önceki kelime bitişik yazılmayacak bir kelime ise uygulanacak işlem
+        //      bir öncekinden farklı olarak e durumu eklenmiş bulunmakta
+
+        else if (i > 1 && (metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r') && (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ' || metin.charAt(i - 1) == 'e')) {
+            metin2 += bas;
+        }
+
+
+        //      bir sonraki harfin sesli harf olmama durumunda öncesine bakıldığı durum
+
+        else if (metin.charAt(i + 1) != 'a' && metin.charAt(i + 1) != 'e' && metin.charAt(i + 1) != 'ı' && metin.charAt(i + 1) != 'i' &&
+                metin.charAt(i + 1) != 'u' && metin.charAt(i + 1) != 'ü' && metin.charAt(i + 1) != 'o' && metin.charAt(i + 1) != 'ö') {
+            if (metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'ö') {
+                metin2 += bas;
+            } else if (metin.charAt(i - 1) == 'e' || metin.charAt(i - 1) == 'ı' || metin.charAt(i - 1) == 'i') {
+                metin2 += son;
+            }
+
+        }
+
+
+        // hiçbiri değilse kelimenin sonda olma durumu uygulanır
+
+        else {
+            metin2 += son;
+        }
+
+
+        //      bir sonraki harf a ise
+
+        if (metin.charAt(i + 1) == 'a') {
+
+
+            metin2 += "ا";
+            i = i + 1;
+        }
+
+
+        //      son harf e ise
+
+        else if (metin.charAt(i + 1) == 'e') {
+
+
+            if (i + 2 == size) {
+                metin2 += "ه";
+            }
+            i = i + 1;
+        }
+
+
+        //      bir sonraki harf ı veya i ise
+
+        else if (metin.charAt(i + 1) == 'ı' || metin.charAt(i + 1) == 'i') {
+
+
+            if (i + 2 == size) {
+                metin2 += "ی";
+            } else {
+                metin2 += "ی";
+            }
+            i = i + 1;
+        }
+
+
+        //      bir sonraki harf u, ü, o veya ö ise
+
+        else if (metin.charAt(i + 1) == 'u' || metin.charAt(i + 1) == 'ü' || metin.charAt(i + 1) == 'o' || metin.charAt(i + 1) == 'ö') {
+
+
+            metin2 += "و";
+            i = i + 1;
+        }
+        return metin2;
+    }
+
+
+    private String tekli(String tek, String son, String orta, String bas, String metin2, String metin, int size) {
+
+        //      ikinci tekli fonksiyonu arap alfabesinde başta ortada sonda durumları bulunan harfler için yapılmıştır
+        //      kendinden sonra gelen sesli harfide yazmaktadır
+
+        //      kelimenin tek harften oluşması durumudur
+
+        if (size == 1) {
+            metin2 = tek;
+            return metin2;
+        }
+
+
+        //      harfin kelimenin yada cümlenin sonunda olması durumudur.
+
+        if (i + 1 == size || metin.charAt(i + 1) == ' ') {
+
+
+            //      Bir önce karaktere göre tek yazılması durumunu kontrol eder. Yani bir önceki harf kendinden sonrakine bitişmeyen durumu
+
+            if ((i == 1 && metin.charAt(0) == 'e') || (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ')) {
+                metin2 += tek;
+            }
+
+
+            //      Bir önce karaktere göre tek yazılması durumunu kontrol eder. Yani bir önceki harf kendinden sonrakine bitişmeyen durumu ek olarak e de eklendi
+
+            else if ((i - 2 >= 0) && (metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                    || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r') && (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ' || metin.charAt(i - 1) == 'e')) {
+                metin2 += tek;
+            } else
+                metin2 += son;
+            return metin2;
+        }
+
+
+        //      kelimenin ilk harf olma durumu
+
+        else if (i == 0) {
+            metin2 += bas;
+        }
+
+
+        //      kelimenin ortasında bir önceki harfe göre başta yazılması durumu
+
+        else if (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == ' '
+                || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || (i == 1 && metin.charAt(0) == 'e')) {
+            metin2 += bas;
+        }
+
+
+        //      kelimenin ortasında bir önceki harfe göre başta yazılması durumu
+
+        else if (i - 2 >= 0) {
+            if (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == ' '
+                    || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'o') {
+                metin2 += bas;
+            } else if ((metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                    || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r') && (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ' || metin.charAt(i - 1) == 'e')) {
+                metin2 += bas;
+            } else if (i + 1 != size) {
+                metin2 += orta;
+            }
+        }
+
+
+        //      bir sonraki kelime sesli harf değilse
+
+        else if (metin.charAt(i + 1) != 'a' && metin.charAt(i + 1) != 'e' && metin.charAt(i + 1) != 'ı' && metin.charAt(i + 1) != 'i' &&
+                metin.charAt(i + 1) != 'u' && metin.charAt(i + 1) != 'ü' && metin.charAt(i + 1) != 'o' && metin.charAt(i + 1) != 'ö') {
+
+            if (metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'ö') {
+                metin2 += bas;
+                return metin2;
+            } else if (metin.charAt(i - 1) == 'e' || metin.charAt(i - 1) == 'ı' || metin.charAt(i - 1) == 'i') {
+                metin2 += orta;
+                return metin2;
+            }
+
+        }
+
+        //      harfin kelime içinde kendinden öncekine ve sonrakine bitişik yazılma durumu
+
+        else if (i + 1 != size) {
+            metin2 += orta;
+        }
+
+
+        //bir sonraki harf a ise
+
+        if (metin.charAt(i + 1) == 'a') {
+
+
+            metin2 += "ا";
+            i = i + 1;
+        }
+
+
+        //son harf e ise
+
+        else if (metin.charAt(i + 1) == 'e') {
+
+
+            if (i + 2 == size) {
+                metin2 += "ە";
+            }
+            i = i + 1;
+        }
+
+
+        //bir sonraki harf ı veya i ise
+
+        else if (metin.charAt(i + 1) == 'ı' || metin.charAt(i + 1) == 'i') {
+
+
+            if (i + 2 == size) {
+                metin2 += "ی";
+            } else {
+                metin2 += "ی";
+            }
+            i = i + 1;
+        }
+
+
+        //bir sonraki harf u, ü, o veya ö ise
+
+        else if (metin.charAt(i + 1) == 'u' || metin.charAt(i + 1) == 'ü' || metin.charAt(i + 1) == 'o' || metin.charAt(i + 1) == 'ö') {
+
+
+            metin2 += "و";
+            i = i + 1;
+        }
+        return metin2;
+
+    }
+
+
+    // ciftli fonksiyonu harfin birden fazla arap alfabesinde karşılığı bulunan harflerin yazımında kullanılır
+
+    private String ciftli(String tek1, String harf1, String orta1, String son1, String tek2, String harf2, String orta2, String son2, String metin2, String metin, int size) {
+
+
+        // kelimenin tek bir karakterden oluşması durumudur
+
+        if (size == 1) {
+            metin2 = yazi(tek1, tek2, size, metin, metin2); //tek;
+            return metin2;
+        }
+
+
+        // harfin sonda olması durumunda nasıl yazılacağını belirler
+
+        if (i + 1 == size || metin.charAt(i + 1) == ' ') {
+
+
+            if ((i == 1 && metin.charAt(0) == 'e') || (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ')) {
+                metin2 = yazi(tek1, tek2, size, metin, metin2); //tek;
+
+            } else if ((i - 2 >= 0) && (metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                    || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r') && (metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                    || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ü'
+                    || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == ' ' || metin.charAt(i - 1) == 'e')) {
+                metin2 = yazi(tek1, tek2, size, metin, metin2); //tek;
+
+            } else
+                metin2 = yazi(son1, son2, size, metin, metin2);
+            return metin2;
+        }
+
+
+        //      harfin başta yazılması durumudur
+
+        else if (i == 0) {
+            metin2 = yazi(harf1, harf2, size, metin, metin2);
+        }
+
+
+        //      bir önceki kelimeye bitişik olup olmaması durumunu kontrol eder
+
+        else if (i > 1 && (metin.charAt(i - 2) == 'd' || metin.charAt(i - 2) == 'z' || metin.charAt(i - 2) == 'j'
+                || metin.charAt(i - 2) == 'v' || metin.charAt(i - 2) == 'r')) {
+            metin2 = yazi(harf1, harf2, size, metin, metin2);
+        }
+
+
+        //      bir önceki kelimeye bitişik olup olmaması durumunu kontrol eder
+
+        else if ((metin.charAt(i - 1) == 'd' || metin.charAt(i - 1) == 'z' || metin.charAt(i - 1) == 'j'
+                || metin.charAt(i - 1) == 'v' || metin.charAt(i - 1) == 'r' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'u'
+                || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == ' ' || (i == 1 && metin.charAt(i - 1) == 'e'))) {
+            metin2 = yazi(harf1, harf2, size, metin, metin2);
+        }
+
+
+        //      bir sonraki kelime sesli harf değilse öncekine bakarak işlem yapar
+
+        else if ((metin.charAt(i + 1) != 'a' && metin.charAt(i + 1) != 'e' && metin.charAt(i + 1) != 'ı' && metin.charAt(i + 1) != 'i' &&
+                metin.charAt(i + 1) != 'u' && metin.charAt(i + 1) != 'ü' && metin.charAt(i + 1) != 'o' && metin.charAt(i + 1) != 'ö')) {
+
+            if (metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'u') {
+                metin2 += harf2;
+                return metin2;
+            } else if (metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'ö') {
+                metin2 += harf1;
+                return metin2;
+            } else if (metin.charAt(i - 1) == 'e' || metin.charAt(i - 1) == 'i') {
+                metin2 += orta1;
+                return metin2;
+            } else if (metin.charAt(i - 1) == 'ı') {
+                metin2 += orta2;
+                return metin2;
+            }
+        }
+
+
+        //      harf son olarak ortada yazılma durumuna düşer
+
+        else if (i + 1 != size) {
+            metin2 = yazi(orta1, orta2, size, metin, metin2);
+        }
+
+
+        return metin2;
+    }
+
+    private String yazi(String harf1, String harf2, int size, String metin, String metin2) {
+
+        //      yazi fonksiyonu çiftli fonksiyonunun bir parçası gibidir.
+        //      harfi temsilen hangi harfin temsil edeceğini belirler
+
+
+        if (i + 1 == size) {
+
+            // harfimiz son harf ise bir önceki harfe bakarak hangisinin seçileceğine karar verir
+
+
+            if ((metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'o' || metin.charAt(i - 1) == 'ı')) {
+                metin2 += harf2;
+                return metin2;
+            } else if ((metin.charAt(i - 1) == 'e' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'ö' || metin.charAt(i - 1) == 'i')) {
+                metin2 += harf1;
+                return metin2;
+            } else if ((metin.charAt(i - 2) == 'a' || metin.charAt(i - 2) == 'u' || metin.charAt(i - 2) == 'o' || metin.charAt(i - 2) == 'ı')) {
+                metin2 += harf2;
+                return metin2;
+            } else if ((metin.charAt(i - 2) == 'e' || metin.charAt(i - 2) == 'ü' || metin.charAt(i - 2) == 'ö' || metin.charAt(i - 2) == 'i')) {
+                metin2 += harf1;
+                return metin2;
+            }
+        }
+
+        if ((metin.charAt(i + 1) == 'a' || metin.charAt(i + 1) == 'u' || metin.charAt(i + 1) == 'o' || metin.charAt(i + 1) == 'ı')) {
+
+            //bir sonraki kalın sesli ise
+
+            metin2 += harf2;
+        } else if ((metin.charAt(i + 1) == 'e' || metin.charAt(i + 1) == 'ü' || metin.charAt(i + 1) == 'ö' || metin.charAt(i + 1) == 'i')) {
+
+            // bir sonraki ince sesli ise
+
+            metin2 += harf1;
+        }
+        if (metin.charAt(i + 1) == 'a') {
+
+            //bir sonraki harf a ise
+
+            metin2 += "ا";
+            i = i + 1;
+        } else if ((metin.charAt(i + 1) == 'e') && (i + 2 == size)) {
+
+            //son harf e ise
+
+            metin2 += "ە";
+            i = i + 1;
+        } else if ((metin.charAt(i + 1) == 'e')) {
+            i = i + 1;
+        } else if (metin.charAt(i + 1) == 'ı' || metin.charAt(i + 1) == 'i') {
+
+            //bir sonraki harf ı veya i ise
+
+            if (i + 2 == size) {
+                metin2 += "ی";
+            } else {
+                metin2 += "ی";
+            }
+        } else if (metin.charAt(i + 1) == 'u' || metin.charAt(i + 1) == 'ü' || metin.charAt(i + 1) == 'o' || metin.charAt(i + 1) == 'ö') {
+
+            //bir sonraki harf u, ü, o veya ö ise
+
+            metin2 += "و";
+            i = i + 1;
+        } else if (i == 0 && (metin.charAt(i + 1) != 'a' || metin.charAt(i + 1) != 'ü' || metin.charAt(i + 1) != 'u' || metin.charAt(i + 1) != 'ö' || metin.charAt(i + 1) != 'o' || metin.charAt(i + 1) != 'e' ||
+                metin.charAt(i + 1) != 'i' || metin.charAt(i + 1) != 'ı')) {
+
+            //      grup gibi kelimenin ilk iki harfi sessiz olarak yazılan kelimelerin yazılımını belirler.
+
+
+            if (metin.charAt(i + 2) == 'a' || metin.charAt(i + 2) == 'u' || metin.charAt(i + 2) == 'ı' || metin.charAt(i + 2) == 'o') {
+
+                //iki sonraki harf a, u, o veya ı ise
+
+                metin2 += harf2;
+            } else if ((metin.charAt(i + 2) == 'e' || metin.charAt(i + 2) == 'ü' || metin.charAt(i + 2) == 'i' || metin.charAt(i + 2) == 'ö')) {
+
+                //iki sonraki harf e, i, ö veya ü ise
+
+                metin2 += harf1;
+            }
+        } else if ((metin.charAt(i + 1) != 'a' || metin.charAt(i + 1) != 'ü' || metin.charAt(i + 1) != 'u' || metin.charAt(i + 1) != 'ö' || metin.charAt(i + 1) != 'o' || metin.charAt(i + 1) != 'e' ||
+                metin.charAt(i + 1) != 'i' || metin.charAt(i + 1) != 'ı')) {
+
+            //      grup gibi kelimenin ilk iki harfi sessiz olarak yazılan kelimelerin yazılımını belirler.
+
+
+            if (metin.charAt(i - 1) == 'a' || metin.charAt(i - 1) == 'u' || metin.charAt(i - 1) == 'ı' || metin.charAt(i - 1) == 'o') {
+
+                //iki sonraki harf a, u, o veya ı ise
+
+                metin2 += harf2;
+            } else if ((metin.charAt(i - 1) == 'e' || metin.charAt(i - 1) == 'ü' || metin.charAt(i - 1) == 'i' || metin.charAt(i - 1) == 'ö')) {
+
+                //iki sonraki harf e, i, ö veya ü ise
+
+                metin2 += harf1;
+            }
+        }
+        return metin2;
+    }
+
+    public void setMetin(String metin) {
+        this.metin = metin;
+    }
+}

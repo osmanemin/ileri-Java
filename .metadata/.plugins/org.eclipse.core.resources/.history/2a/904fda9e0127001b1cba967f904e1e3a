@@ -1,0 +1,31 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mantarTeknoloji.mutercim.DataAccess.IWordDal;
+
+@Service
+public class WordManager implements IWordService {
+
+	private IWordDal wordDal;
+	
+	
+	@Autowired
+	public WordManager(IWordDal wordDal) {
+		this.wordDal = wordDal;
+	}
+
+	@Override
+	public String translateFromTr(String text) {
+		w
+		return null;
+	}
+
+	@Override
+	public String translateFromOs(String text) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

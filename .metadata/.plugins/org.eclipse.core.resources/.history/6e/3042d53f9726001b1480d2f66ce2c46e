@@ -1,0 +1,15 @@
+package com.mantarTeknoloji.mutercim.Entities;
+
+public interface IWordModel {
+	String getTr();
+
+	void setTr(String tr);
+
+	String getOsm();
+
+	void setOsm(String osm);
+
+	String getProper_noun();
+
+	void setProper_noun(String proper_noun);	
+}

@@ -1,0 +1,33 @@
+package com.mantarteknoloji.maven;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main( String[] args )
+    {
+        
+    	try {
+    		fonk();
+			System.out.println("A");
+		} catch (RuntimeException re) {
+			System.out.println("B");
+		} catch (Exception e){
+			System.out.println("C");
+		}
+
+    	
+    }
+    
+    static void fonk() throws Exception{
+    	try {
+			System.out.println(1/0);
+		} catch (RuntimeException re) {
+			System.out.println("D");
+		} catch (Exception e){
+			System.out.println("E");
+		}
+    }
+}

@@ -1,0 +1,11 @@
+package com.mantarTeknoloji.mutercim.Entities;
+
+public interface IWordModel {
+	public String getTr();
+
+	public void setTr(String tr) ;
+
+	public String getOsm() ;
+
+	public void setOsm(String osm);
+}

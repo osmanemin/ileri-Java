@@ -1,0 +1,5 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+public class WordManager implements IWordService {
+
+}

@@ -1,0 +1,584 @@
+package com.mantarTeknoloji.mutercim.Business.TranslateFromTr;
+
+import java.util.ArrayList;
+
+public class SuffixesTR {
+
+
+    private String kelime;                                               //      veri tabanından geriye kalan ekler topluluğu
+    private char son_karakter;                                           //      kelimenin veya eklerden birinin son karakteri
+    private ArrayList<Character> karakterList = new ArrayList<>();           //      son karakterlerin listesi
+    private int ek_uzunlugu;                                             //      eklenen ekin uzunluğu
+    private boolean exist = false;                                       //      ek elimzideki verilerde bulundumu bulunmadı mı
+    private ArrayList<String> osmList = new ArrayList<>();                 //      kelimenin kökü ve eklerin bulunduğu liste (osmanlıca)
+    private boolean fiilmi = false;                                      //      kelimenin fiil olup olmadaığının malumatını verir.
+    private boolean basarili = true;
+    private boolean nharfi = false;
+
+    private void ekYedili() {
+        exist = true;
+        if (kelime.endsWith("ımtırak") || kelime.endsWith("imtırak")) {
+            ekYaz("متراق");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 7;
+    }
+
+    private void ekAltili() {
+        exist = true;
+        if (kelime.endsWith("dırlar") || kelime.endsWith("dirler") || kelime.endsWith("durlar") || kelime.endsWith("dürler") ||
+                kelime.endsWith("tırlar") || kelime.endsWith("tirler") || kelime.endsWith("turlar") || kelime.endsWith("türler")) {
+            ekYaz("درلر");
+        } else if (kelime.endsWith("acağım")) {
+            ekYaz("ﺎجغم");
+        } else if (kelime.endsWith("eceğim")) {
+            ekYaz("ەجگم");
+        } else if (kelime.endsWith("mtırak")) {
+            ekYaz("متراق");
+        } else if (kelime.endsWith("sınlar") || kelime.endsWith("sinler")) {
+            ekYaz("سینلر");
+        } else if (kelime.endsWith("sünler") || kelime.endsWith("sunlar")) {
+            ekYaz("سونلر");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 6;
+    }
+
+    private void ekBesli() {
+        exist = true;
+        if (kelime.endsWith("makta") || kelime.endsWith("mekte")) {
+            ekYaz("ماقدە");
+        } else if (kelime.endsWith("acağı")) {
+            ekYaz("ﺎجغی");
+        } else if (kelime.endsWith("eceği")) {
+            ekYaz("ەجگی");
+        } else if (kelime.endsWith("diğin") || kelime.endsWith("düğün") || kelime.endsWith("tiğin") || kelime.endsWith("tüğün")) {
+            if (nharfi)
+                ekYaz("دیگن");
+            else
+                ekYaz("دیگڭ");
+        } else if (kelime.endsWith("dığın") || kelime.endsWith("duğun") || kelime.endsWith("tığın") || kelime.endsWith("tuğun")) {
+            if (nharfi)
+                ekYaz("دیغن");
+            else
+                ekYaz("دیغڭ");
+        } else if (kelime.endsWith("diğim") || kelime.endsWith("düğüm") || kelime.endsWith("tiğim") || kelime.endsWith("tüğüm")) {
+            ekYaz("دیگم");
+        } else if (kelime.endsWith("dığım") || kelime.endsWith("duğum") || kelime.endsWith("tığım") || kelime.endsWith("tuğum")) {
+            ekYaz("دیغم");
+        } else if (kelime.endsWith("diniz") || kelime.endsWith("dınız") || kelime.endsWith("dunuz") || kelime.endsWith("dünüz") ||
+                kelime.endsWith("tiniz") || kelime.endsWith("tınız") || kelime.endsWith("tunuz") || kelime.endsWith("tünüz")) {
+            ekYaz("دڭز");
+        } else if (kelime.endsWith("tılar") || kelime.endsWith("tular") || kelime.endsWith("tüler") || kelime.endsWith("tiler") ||
+                kelime.endsWith("dılar") || kelime.endsWith("dular") || kelime.endsWith("düler") || kelime.endsWith("diler")) {
+            ekYaz("دیلر");
+        } else if (kelime.endsWith("ceğiz")) {
+            ekYaz("جگز");
+        } else if (kelime.endsWith("cağız")) {
+            ekYaz("جغز");
+        } else if (kelime.endsWith("cağım") || kelime.endsWith("cığım") || kelime.endsWith("cuğum")) {
+            ekYaz("جغم");
+        } else if (kelime.endsWith("ceğim") || kelime.endsWith("ciğim") || kelime.endsWith("cüğüm")) {
+            ekYaz("جگم");
+        } else if (kelime.endsWith("cağın") || kelime.endsWith("cığın") || kelime.endsWith("cuğun")) {
+            ekYaz("جغن");
+        } else if (kelime.endsWith("ceğin") || kelime.endsWith("ciğin") || kelime.endsWith("cüğün")) {
+            ekYaz("جگن");
+        } else if (kelime.endsWith("dıkça") || kelime.endsWith("dukça")) {
+            ekYaz("دقجە");
+        } else if (kelime.endsWith("dikçe") || kelime.endsWith("dükçe")) {
+            ekYaz("دكجە");
+        } else if (kelime.endsWith("medim")) {
+            ekYaz("مدم");
+        } else if (kelime.endsWith("medi")) {
+            ekYaz("مدی");
+        } else if (kelime.endsWith("medin")) {
+            ekYaz("مدڭ");
+        } else if (kelime.endsWith("medik")) {
+            ekYaz("مدك");
+        } else if (kelime.endsWith("memiş")) {
+            ekYaz("ممش");
+        } else if (kelime.endsWith("yınca") || kelime.endsWith("yince") || kelime.endsWith("yunca") || kelime.endsWith("yünce")) {
+            ekYaz("ینجە");
+        } else if (kelime.endsWith("yerek")) {
+            ekYaz("یەرك");
+        } else if (kelime.endsWith("yarak")) {
+            ekYaz("یارق");
+        } else if (kelime.endsWith("madan")) {
+            ekYaz("مادن");
+        } else if (kelime.endsWith("meden")) {
+            ekYaz("مدن");
+        } else if (kelime.endsWith("sınız") || kelime.endsWith("siniz") || kelime.endsWith("sunuz") || kelime.endsWith("sünüz")) {
+            ekYaz("سڭز");
+        } else if (kelime.endsWith("yecek")) {
+            ekYaz("یەجك");
+        } else if (kelime.endsWith("yacak")) {
+            ekYaz("یاجق");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 5;
+    }
+
+    private void ekDortlu() {
+        exist = true;
+        if (kelime.endsWith("diği") || kelime.endsWith("düğü") || kelime.endsWith("tiği") || kelime.endsWith("tüğü")) {
+            ekYaz("دیگی");
+        } else if (kelime.endsWith("dığı") || kelime.endsWith("duğu") || kelime.endsWith("tığı") || kelime.endsWith("tuğu")) {
+            ekYaz("دیغی");
+        } else if (kelime.endsWith("cağı") || kelime.endsWith("cığı") || kelime.endsWith("cuğu")) {
+            ekYaz("جغی");
+        } else if (kelime.endsWith("ceği") || kelime.endsWith("ciği") || kelime.endsWith("cüğü")) {
+            ekYaz("جگی");
+        } else if (kelime.endsWith("acağ")) {
+            ekYaz("جغی");
+        } else if (kelime.endsWith("eceğ")) {
+            ekYaz("جگی");
+        } else if (kelime.endsWith("abil")) {
+            ekYaz("ابیل");
+        } else if (kelime.endsWith("ebil")) {
+            ekYaz("ەبیل");
+        } else if (kelime.endsWith("acak")) {
+            ekYaz("اجق");
+        } else if (kelime.endsWith("ecek")) {
+            ekYaz("ەجك");
+        } else if (kelime.endsWith("arak")) {
+            ekYaz("ارق");
+        } else if (kelime.endsWith("erek")) {
+            ekYaz("ەرك");
+        } else if (kelime.endsWith("iken")) {
+            ekYaz("ایكن");
+        } else if (kelime.endsWith("imiz") || kelime.endsWith("ımız") || kelime.endsWith("umuz") || kelime.endsWith("ümüz")) {
+            ekYaz("مز");
+        } else if (kelime.endsWith("ınca") || kelime.endsWith("ince") || kelime.endsWith("unca") || kelime.endsWith("ünce")) {
+            ekYaz("نجە");
+        } else if (kelime.endsWith("ıncı") || kelime.endsWith("inci") || kelime.endsWith("uncu") || kelime.endsWith("üncü")) {
+            ekYaz("نجی");
+        } else if (kelime.endsWith("iniz") || kelime.endsWith("ınız") || kelime.endsWith("unuz") || kelime.endsWith("ünüz")) {
+            ekYaz("ڭز");
+        } else if (kelime.endsWith("irim") || kelime.endsWith("ırım")) {
+            ekYaz("یرم");
+        } else if (kelime.endsWith("ürüm") || kelime.endsWith("urum")) {
+            ekYaz("ورم");
+        } else if (kelime.endsWith("iyor") || kelime.endsWith("ıyor") || kelime.endsWith("uyor") || kelime.endsWith("üyor")) {
+            ekYaz("ییور");
+        } else if (kelime.endsWith("ları") || kelime.endsWith("leri")) {
+            ekYaz("لری");
+        } else if (kelime.endsWith("malı") || kelime.endsWith("meli")) {
+            ekYaz("ملی");
+        } else if (kelime.endsWith("mağa")) {
+            ekYaz("مغە");
+        } else if (kelime.endsWith("meğe")) {
+            ekYaz("مگە");
+        } else if (kelime.endsWith("oğlu")) {
+            ekYaz("اوغلی");
+        } else if (kelime.endsWith("maya") || kelime.endsWith("meye")) {
+            ekYaz("مەیە");
+        } else if (kelime.endsWith("ydim") || kelime.endsWith("ydım")) {
+            ekYaz("یدم");
+        } else if (kelime.endsWith("ydin") || kelime.endsWith("ydın")) {
+            ekYaz("یدڭ");
+        } else if (kelime.endsWith("yalı") || kelime.endsWith("yeli")) {
+            ekYaz("یالی");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 4;
+    }
+
+    private void ekUclu() {
+        exist = true;
+        if (kelime.endsWith("ydı") || kelime.endsWith("ydi")) {
+            ekYaz("یدی");
+        } else if (kelime.endsWith("alı")) {
+            ekYaz("الی");
+        } else if (kelime.endsWith("eli")) {
+            ekYaz("ەلی");
+        } else if (kelime.endsWith("cak")) {
+            ekYaz("جق");
+        } else if (kelime.endsWith("cek")) {
+            ekYaz("جك");
+        } else if (kelime.endsWith("can")) {
+            ekYaz("جان");
+        } else if (kelime.endsWith("cen")) {
+            ekYaz("جن");
+        } else if (kelime.endsWith("cik") || kelime.endsWith("cük") || kelime.endsWith("çik") || kelime.endsWith("çük")) {
+            ekYaz("جك");
+        } else if (kelime.endsWith("cık") || kelime.endsWith("cuk") || kelime.endsWith("çık") || kelime.endsWith("çuk")) {
+            ekYaz("جق");
+        } else if (kelime.endsWith("cil") || kelime.endsWith("cıl")) {
+            ekYaz("جیل");
+        } else if (kelime.endsWith("cul") || kelime.endsWith("cül")) {
+            ekYaz("جول");
+        } else if (kelime.endsWith("çil") || kelime.endsWith("çıl")) {
+            ekYaz("چیل");
+        } else if (kelime.endsWith("çul") || kelime.endsWith("çül")) {
+            ekYaz("چول");
+        } else if (kelime.endsWith("dan") || kelime.endsWith("den")) {
+            ekYaz("دن");
+        } else if (kelime.endsWith("dik") || kelime.endsWith("dük")) {
+            ekYaz("دك");
+        } else if (kelime.endsWith("dim") || kelime.endsWith("dım") || kelime.endsWith("dum") || kelime.endsWith("düm")) {
+            ekYaz("دم");
+        } else if (kelime.endsWith("din") || kelime.endsWith("dın") || kelime.endsWith("dun") || kelime.endsWith("dün")) {
+            ekYaz("دڭ");
+        } else if (kelime.endsWith("dir") || kelime.endsWith("dır") || kelime.endsWith("dur") || kelime.endsWith("dür")) {
+            ekYaz("در");
+        } else if (kelime.endsWith("diğ") || kelime.endsWith("düğ") || kelime.endsWith("tiğ") || kelime.endsWith("tüğ")) {
+            ekYaz("دیگ");
+        } else if (kelime.endsWith("dığ") || kelime.endsWith("duğ") || kelime.endsWith("tığ") || kelime.endsWith("tuğ")) {
+            ekYaz("دیغ");
+        } else if (kelime.endsWith("gil")) {
+            ekYaz("گیل");
+        } else if (kelime.endsWith("dık") || kelime.endsWith("duk")) {
+            ekYaz("دق");
+        } else if (kelime.endsWith("kar") || kelime.endsWith("kâr")) {
+            ekYaz("كار");
+        } else if (kelime.endsWith("ıcı") || kelime.endsWith("ici") || kelime.endsWith("ucu") || kelime.endsWith("ücü")) {
+            ekYaz("یجی");
+        } else if (kelime.endsWith("ken")) {
+            ekYaz("كن");
+        } else if (kelime.endsWith("lan")) {
+            ekYaz("لان");
+        } else if (kelime.endsWith("lar") || kelime.endsWith("ler")) {
+            ekYaz("لر");
+        } else if (kelime.endsWith("laş")) {
+            ekYaz("لاش");
+        } else if (kelime.endsWith("len")) {
+            ekYaz("لن");
+        } else if (kelime.endsWith("leş")) {
+            ekYaz("لش");
+        } else if (kelime.endsWith("lik") || kelime.endsWith("lük")) {
+            ekYaz("لك");
+        } else if (kelime.endsWith("lık") || kelime.endsWith("luk")) {
+            ekYaz("لق");
+        } else if (kelime.endsWith("lım") || kelime.endsWith("lim")) {
+            ekYaz("لم");
+        } else if (kelime.endsWith("mak")) {
+            ekYaz("مق");
+        } else if (kelime.endsWith("mam")) {
+            ekYaz("مام");
+        } else if (kelime.endsWith("maz")) {
+            ekYaz("ماز");
+        } else if (kelime.endsWith("mek")) {
+            ekYaz("مك");
+        } else if (kelime.endsWith("mem")) {
+            ekYaz("مم");
+        } else if (kelime.endsWith("mez") || kelime.endsWith("miz") || kelime.endsWith("mız") || kelime.endsWith("muz") || kelime.endsWith("müz  ")) {
+            ekYaz("مز");
+        } else if (kelime.endsWith("miş") || kelime.endsWith("mış") || kelime.endsWith("muş") || kelime.endsWith("müş")) {
+            ekYaz("مش");
+        } else if (kelime.endsWith("nin") || kelime.endsWith("nın") || kelime.endsWith("nun") || kelime.endsWith("nün")) {
+            ekYaz("نڭ");
+        } else if (kelime.endsWith("niz") || kelime.endsWith("nız") || kelime.endsWith("nuz") || kelime.endsWith("nüz")) {
+            ekYaz("ڭز");
+        } else if (kelime.endsWith("sin") || kelime.endsWith("sın") || kelime.endsWith("sun") || kelime.endsWith("sün")) {
+            ekYaz("سڭ");
+        } else if (kelime.endsWith("siz") || kelime.endsWith("sız") || kelime.endsWith("suz") || kelime.endsWith("süz")) {
+            ekYaz("سز");
+        } else if (kelime.endsWith("sal")) {
+            ekYaz("سال");
+        } else if (kelime.endsWith("san") || kelime.endsWith("sen")) {
+            ekYaz("سەڭ");
+        } else if (kelime.endsWith("sel")) {
+            ekYaz("سل");
+        } else if (kelime.endsWith("sıl") || kelime.endsWith("sil")) {
+            ekYaz("سیل");
+        } else if (kelime.endsWith("şar") || kelime.endsWith("şer")) {
+            ekYaz("شر");
+        } else if (kelime.endsWith("tan") || kelime.endsWith("ten")) {
+            ekYaz("دن");
+        } else if (kelime.endsWith("taş") || kelime.endsWith("daş")) {
+            ekYaz("داش");
+        } else if (kelime.endsWith("teş") || kelime.endsWith("deş")) {
+            ekYaz("دش");
+        } else if (kelime.endsWith("tar") || kelime.endsWith("dar")) {
+            ekYaz("دار");
+        } else if (kelime.endsWith("tik") || kelime.endsWith("tük")) {
+            ekYaz("دك");
+        } else if (kelime.endsWith("tim")) {
+            ekYaz("دم");
+        } else if (kelime.endsWith("tin")) {
+            ekYaz("دڭ");
+        } else if (kelime.endsWith("tir") || kelime.endsWith("tır") || kelime.endsWith("tur") || kelime.endsWith("tür")) {
+            ekYaz("در");
+        } else if (kelime.endsWith("tık") || kelime.endsWith("tuk")) {
+            ekYaz("دق");
+        } else if (kelime.endsWith("tım") || kelime.endsWith("tum") || kelime.endsWith("tüm")) {
+            ekYaz("دم");
+        } else if (kelime.endsWith("tın") || kelime.endsWith("tun") || kelime.endsWith("tün")) {
+            ekYaz("دڭ");
+        } else if (kelime.endsWith("yan")) {
+            ekYaz("یان");
+        } else if (kelime.endsWith("yen")) {
+            ekYaz("ین");
+        } else if (kelime.endsWith("gen")) {
+            ekYaz("گن");
+        } else if (kelime.endsWith("yim") || kelime.endsWith("yım")) {
+            ekYaz("یم");
+        } else if (kelime.endsWith("yin") || kelime.endsWith("yın")) {
+            ekYaz("یڭ");
+        } else if (kelime.endsWith("yiz") || kelime.endsWith("yız") || kelime.endsWith("yuz") || kelime.endsWith("yüz")) {
+            ekYaz("یز");
+        } else if (kelime.endsWith("yış") || kelime.endsWith("yiş") || kelime.endsWith("yuş") || kelime.endsWith("yüş")) {
+            ekYaz("یش");
+        } else if (kelime.endsWith("yla") || kelime.endsWith("yle")) {
+            ekYaz("یلە");
+        } else if (kelime.endsWith("yıp") || kelime.endsWith("yip") || kelime.endsWith("yup") || kelime.endsWith("yüp")) {
+            ekYaz("یوپ");
+        } else if (kelime.endsWith("yor")) {
+            ekYaz("یور");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 3;
+    }
+
+    private void ekIkili() {
+        exist = true;
+        if (kelime.endsWith("ar")) {
+            ekYaz("ار");
+        } else if (kelime.endsWith("er")) {
+            ekYaz("ر");
+        } else if (kelime.endsWith("cı") || kelime.endsWith("ci") || kelime.endsWith("cu") || kelime.endsWith("cü") ||
+
+                kelime.endsWith("çı") || kelime.endsWith("çi") || kelime.endsWith("çu") || kelime.endsWith("çü")) {
+            ekYaz("جی");
+        } else if (kelime.endsWith("ce") || kelime.endsWith("ca") || kelime.endsWith("ça") || kelime.endsWith("çe")) {
+            ekYaz("جە");
+        } else if (kelime.endsWith("da") || kelime.endsWith("de")) {
+            ekYaz("دە");
+        } else if (kelime.endsWith("di") || kelime.endsWith("dı") || kelime.endsWith("du") || kelime.endsWith("dü")) {
+            ekYaz("دی");
+        } else if (kelime.endsWith("ek")) {
+            ekYaz("ك");
+        } else if (kelime.endsWith("ak")) {
+            ekYaz("ق");
+        } else if (kelime.endsWith("il") || kelime.endsWith("ıl") || kelime.endsWith("ul") || kelime.endsWith("ül")) {
+            ekYaz("ل");
+            nharfi = true;
+        } else if (kelime.endsWith("uz") || kelime.endsWith("üz") || kelime.endsWith("iz") || kelime.endsWith("ız")) {
+            ekYaz("ز");
+        } else if (kelime.endsWith("im") || kelime.endsWith("ım") || kelime.endsWith("um") || kelime.endsWith("üm")) {
+            ekYaz("م");
+        } else if (kelime.endsWith("in") || kelime.endsWith("ın")) {
+            if (fiilmi || nharfi)
+                ekYaz("ن");
+            else
+                ekYaz("ڭ");
+        } else if (kelime.endsWith("en")) {
+            ekYaz("ن");
+        } else if (kelime.endsWith("ir") || kelime.endsWith("ır")) {
+            ekYaz("یر");
+        } else if (kelime.endsWith("iş") || kelime.endsWith("ış")) {
+            ekYaz("یش");
+        } else if (kelime.endsWith("uş") || kelime.endsWith("üş")) {
+            ekYaz("وش");
+        } else if (kelime.endsWith("ıp") || kelime.endsWith("ip") || kelime.endsWith("up") || kelime.endsWith("üp")) {
+            ekYaz("وب");
+        } else if (kelime.endsWith("an")) {
+            ekYaz("ان");
+        } else if (kelime.endsWith("ki") || kelime.endsWith("kü")) {
+            ekYaz("كی");
+        } else if (kelime.endsWith("la")) {
+            if (fiilmi)
+                ekYaz("لا");
+            else
+                ekYaz("لە");
+        } else if (kelime.endsWith("le")) {
+            ekYaz("لە");
+        } else if (kelime.endsWith("li") || kelime.endsWith("lı")) {
+            ekYaz("لی");
+        } else if (kelime.endsWith("lu") || kelime.endsWith("lü")) {
+            ekYaz("لو");
+        } else if (kelime.endsWith("me")) {
+            ekYaz("مە");
+        } else if (kelime.endsWith("ma")) {
+            if (fiilmi)
+                ekYaz("مە");
+            else
+                ekYaz("ما");
+        } else if (kelime.endsWith("mı") || kelime.endsWith("mi") || kelime.endsWith("mu") || kelime.endsWith("mü")) {
+            ekYaz("م");
+        } else if (kelime.endsWith("ne")) {
+            ekYaz("ڭە");
+        } else if (kelime.endsWith("na")) {
+            ekYaz("ڭا");
+        } else if (kelime.endsWith("ol")) {
+            ekYaz("اول");
+        } else if (kelime.endsWith("sa") || kelime.endsWith("se")) {
+            ekYaz("سە");
+        } else if (kelime.endsWith("si") || kelime.endsWith("sı") || kelime.endsWith("su") || kelime.endsWith("sü")) {
+            ekYaz("سى");
+        } else if (kelime.endsWith("ta") || kelime.endsWith("te")) {
+            ekYaz("دە");
+        } else if (kelime.endsWith("ti") || kelime.endsWith("tı") || kelime.endsWith("tu") || kelime.endsWith("tü")) {
+            ekYaz("دی");
+        } else if (kelime.endsWith("um")) {
+            ekYaz("م");
+        } else if (kelime.endsWith("un") || kelime.endsWith("ün")) {
+            ekYaz("ڭ");
+        } else if (kelime.endsWith("ur") || kelime.endsWith("ür")) {
+            ekYaz("ور");
+        } else if (kelime.endsWith("vi")) {
+            ekYaz("وی");
+        } else if (kelime.endsWith("ya")) {
+            if (fiilmi)
+                ekYaz("یا");
+            else
+                ekYaz("یە");
+        } else if (kelime.endsWith("ye")) {
+            ekYaz("یە");
+        } else if (kelime.endsWith("yi") || kelime.endsWith("yı") || kelime.endsWith("yu") || kelime.endsWith("yü")) {
+            ekYaz("یی");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 2;
+    }
+
+    private void ekBirli() {
+        exist = true;
+        if (kelime.endsWith("a")) {
+            if (fiilmi)
+                ekYaz("ا");
+            else
+                ekYaz("ە");
+        } else if (kelime.endsWith("e")) {
+            ekYaz("ە");
+        } else if (kelime.endsWith("i") || kelime.endsWith("ı")) {
+            ekYaz("ی");
+        } else if (kelime.endsWith("u") || kelime.endsWith("ü")) {
+            if (osmList.size() == 0)
+                ekYaz("ی");
+        } else if (kelime.endsWith("m")) {
+            ekYaz("م");
+        } else if (kelime.endsWith("n")) {
+            if (nharfi)
+                ekYaz("ن");
+            else
+                ekYaz("ڭ");
+        } else if (kelime.endsWith("r")) {
+            ekYaz("ر");
+        } else if (kelime.endsWith("t")) {
+            ekYaz("ت");
+        } else if (kelime.endsWith("y")) {
+            ekYaz("ی");
+        } else {
+            exist = false;
+        }
+        ek_uzunlugu = 1;
+    }
+
+    private void ekYaz(String orta) {
+        osmList.add(orta);
+    }
+
+    private void ekBulma() {
+        int lenght = kelime.length();
+        while (lenght > 0) {
+            if (lenght >= 7 && !exist) {
+                ekYedili();
+            }
+            if (lenght >= 6 && !exist) {
+                ekAltili();
+            }
+            if (lenght >= 5 && !exist) {
+                ekBesli();
+            }
+            if (lenght >= 4 && !exist) {
+                ekDortlu();
+            }
+            if (lenght >= 3 && !exist) {
+                ekUclu();
+            }
+            if (lenght >= 2 && !exist) {
+                ekIkili();
+            }
+            if (lenght >= 1 && !exist) {
+                ekBirli();
+            }
+            // Ek bulunursa
+
+            if (exist) {
+                exist = false;
+                if (lenght - ek_uzunlugu >= 0) {
+                    char dizi[] = kelime.toCharArray();
+                    son_karakter = kelime.charAt(kelime.length() - 1);
+                    kelime = "";
+                    lenght -= ek_uzunlugu;
+                    for (int i = 0; i < lenght; i++) {
+                        kelime += dizi[i];
+                    }
+                    karakterList.add(son_karakter);
+                } else {
+                    break;
+                }
+            } else {
+                basarili = false;
+                break;
+
+                // aynısını dönelim adama
+
+
+                //  eğer ek yoksa ne olacak
+                //  ek bulunamaz ve kelime VT de yoksa ek aranması durdurulur. kelimenin geri kalan kısmı
+                //  Algoritma tarafından yazılır
+                //  önceden bulunan eklerle birleştirilp geri dönüş yapılır
+            }
+
+        }
+
+    }
+
+
+    //ma - me eki ortada iken farklı yazılır
+
+    private void mDuzeltme() {
+        int length = osmList.size() - 1;
+        for (int i = 0; i < length; i++) {
+            if (osmList.get(i).equals("ﻤﺎ") || osmList.get(i).equals("ﻤﻪ")) {
+                osmList.set(i, "ﻢ");
+            } else if (osmList.get(i).equals("ما") || osmList.get(i).equals("مه")) {
+                osmList.set(i, "ﻡ");
+            }
+        }
+    }
+
+    private void ekBirlestirme() {
+        int length = osmList.size() - 1;
+        kelime = "";
+        for (int i = length; i >= 0; i--) {
+            kelime += osmList.get(i);
+        }
+    }
+
+    private void reset() {
+        osmList.clear();
+        karakterList.clear();
+        nharfi = false;
+    }
+
+
+    public String start() {
+        ekBulma();
+        if (fiilmi)
+            mDuzeltme();
+        ekBirlestirme();
+        reset();
+        if (basarili)
+            return kelime;
+        else
+            return "iptal";
+    }
+
+    public void set(String kelime, char son_karakter, boolean fiilmi, boolean nharfi) {
+        this.fiilmi = fiilmi;
+        this.kelime = kelime;
+        this.son_karakter = son_karakter;
+        basarili = true;
+        this.nharfi = nharfi;
+    }
+}

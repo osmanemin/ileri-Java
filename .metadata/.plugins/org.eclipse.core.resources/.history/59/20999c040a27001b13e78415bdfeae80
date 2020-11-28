@@ -1,0 +1,44 @@
+package com.mantarTeknoloji.mutercim.DataAccess;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mantarTeknoloji.mutercim.Entities.Noun;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+@Repository
+public class HibernateWordDal implements IWordDal{
+
+	private EntityManager entityManager;
+	
+	
+	@Autowired
+	public HibernateWordDal(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
+
+	@Override
+	@Transactional
+	public List<Verb> getAllVerbs() {
+		Session session = entityManager.unwrap(Session.class);
+		List<Verb> verbs = session.createQuery("from verb",Verb.class).getResultList();
+		
+		return verbs;
+	}
+
+	@Override
+	@Transactional
+	public List<Noun> getAllNouns() {
+		Session session = entityManager.unwrap(Session.class);
+		List<Noun> nouns = session.createQuery("from noun", Noun.class).getResultList();
+		System.out.println("hibernate" + nouns.size());
+		return null;
+	}
+
+}

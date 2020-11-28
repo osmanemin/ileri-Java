@@ -1,0 +1,6 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+public interface IWordService {
+	String translateFromTr(String text);
+	String tarnslateFromOs(String text);
+}

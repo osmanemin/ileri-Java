@@ -1,0 +1,42 @@
+package com.mantarTeknoloji.mutercim.Business;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.mantarTeknoloji.mutercim.Business.Translate.FromTr.TranslateFromTr;
+import com.mantarTeknoloji.mutercim.DataAccess.IWordDal;
+import com.mantarTeknoloji.mutercim.Entities.Noun;
+import com.mantarTeknoloji.mutercim.Entities.Verb;
+
+@Service
+public class WordManager implements IWordService {
+
+	private IWordDal wordDal;
+	
+	
+	@Autowired
+	public WordManager(IWordDal wordDal) {
+		this.wordDal = wordDal;
+	}
+
+	@Override
+	@Transactional
+	public List<Verb> translateFromTr(String text) {
+		List<Noun> nouns = wordDal.getAllNouns();
+		List<Verb> verbs = wordDal.getAllVerbs();
+		TranslateFromTr translateTr = new TranslateFromTr(nouns,verbs);
+		String result = translateTr.translate(text);
+		return result;
+	}
+
+	@Override
+	public String translateFromOs(String text) {
+		List<Noun> nouns = wordDal.getAllNouns();
+		List<Verb> verbs = wordDal.getAllVerbs();
+		return null;
+	}
+
+}

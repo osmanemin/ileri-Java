@@ -1,0 +1,11 @@
+asp_create_location=Central US
+asp_create_pricing=Basic_B1
+asp_name=asp-201117162115
+eclipse.preferences.version=1
+rg_name=rg-webapp-201117162115
+runtime_javaversion=Newest Java 8
+runtime_linux=TOMCAT 9.0-java11
+runtime_os=linux
+runtime_webcontainer=
+subscription=Azure for Students
+webapp_name=webapp-201117162115

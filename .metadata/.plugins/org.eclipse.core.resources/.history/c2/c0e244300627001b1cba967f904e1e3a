@@ -1,0 +1,43 @@
+package com.mantarTeknoloji.mutercim.Entities;
+
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="verb")
+public class Verb {
+	@Id
+	@Column(name = "tr")
+	private String tr;
+	
+	@Column(name="osm")
+	private String osm;
+	
+	
+	public Verb() {}
+
+	public Verb(String tr, String osm, String proper_none) {
+		super();
+		this.tr = tr;
+		this.osm = osm;
+	}
+
+	public String getTr() {
+		return tr;
+	}
+
+	public void setTr(String tr) {
+		this.tr = tr;
+	}
+
+	public String getOsm() {
+		return osm;
+	}
+
+	public void setOsm(String osm) {
+		this.osm = osm;
+	}
+
+	
+		
+}
